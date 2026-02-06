@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoParts TDT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- Estilos Generales y Reset --- */
+        :root {
+            --primary-color: #e63946; /* Rojo deportivo */
+            --secondary-color: #333; /* Azul oscuro profesional */
+            --dark-bg: #1a1a1a;
+            --light-bg: #f1f5f9;
+            --text-color: #333;
+            --shadow-sm: 0 4px 6px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background-color: var(--light-bg); 
+            scroll-behavior: smooth; 
+            color: var(--text-color);
+        }
+
+        /* --- Header y Navegación --- */
+        header { 
+            background-color: rgba(26, 26, 26, 0.95); /* Semitransparente */
+            backdrop-filter: blur(10px); /* Efecto vidrio */
+            color: red; 
+            padding: 1rem 0; 
+            text-align: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4); 
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        header h1 {
+            color:red;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        nav { margin-top: 15px; }
+        nav a { 
+            color: #e0e0e0; 
+            text-decoration: none; 
+            margin: 0 20px; 
+            font-weight: 600; 
+            font-size: 1.1rem;
+            transition: all 0.3s ease; 
+            position: relative;
+        }
+        
+        /* Animación de subrayado en el menú */
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+        nav a:hover { color: white; }
+        nav a:hover::after { width: 100%; }
+
+        /* --- Banner Principal (Hero) --- */
+        .hero { 
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(29, 53, 87, 0.7)), url(2.jpg.jpeg); 
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed; /* Efecto Parallax */
+            color: white; 
+            height: 400px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%); /* Corte diagonal moderno */
+        }
+        
+        /* Animación de entrada */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h2 { 
+            font-size: 3rem; 
+            margin: 0; 
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            animation: fadeInUp 0.8s ease-out;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* --- Contenedor y Grid --- */
+        .container { max-width: 1200px; margin: 3rem auto; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+
+        /* --- Tarjeta de Producto --- */
+        .card { 
+            background: white; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            box-shadow: var(--shadow-sm); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            border: none;
+            position: relative;
+        }
+
+        .card:hover { 
+            transform: translateY(-10px); 
+            box-shadow: var(--shadow-md); 
+        }
+
+        /* Contenedor de imagen para efecto zoom */
+        .card a img, .card img { 
+            width: 100%; 
+            height: 220px; 
+            object-fit: contain; 
+            background: white;
+            padding: 10px;
+            box-sizing: border-box;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.1); /* Zoom al pasar el mouse */
+        }
+
+        .card-info { padding: 20px; text-align: center; position: relative; z-index: 2; background: white; }
+        
+        .card-info h3 { font-size: 1.2rem; margin-bottom: 5px; color: var(--secondary-color); }
+        .card-info p { font-size: 0.9rem; color: #666; margin-bottom: 10px; line-height: 1.4; }
+        
+        .price { 
+            font-size: 1.6rem; 
+            color: var(--primary-color); 
+            font-weight: 800; 
+            margin: 15px 0; 
+            display: block;
+        }
+
+        /* --- Botones --- */
+        .btn-mercadolibre { 
+            display: block; 
+            background: linear-gradient(45deg, #ffe600, #ffcc00); /* Color ML */
+            color: #2d3436; 
+            padding: 12px; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn-mercadolibre:hover { 
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(255, 204, 0, 0.5);
+            background: linear-gradient(45deg, #ffcc00, #ffbb00);
+        }
+
+        /* Ajuste para el botón rojo específico si se desea mantener identidad de marca */
+        .grid .card:nth-child(n) .btn-mercadolibre {
+             /* Sobreescribimos para mantener el estilo rojo del botón original pero con degradado */
+             background: linear-gradient(45deg, #ff0808, #d90429);
+             color: white;
+             box-shadow: 0 4px 15px rgba(217, 4, 41, 0.3);
+        }
+        .grid .card:nth-child(n) .btn-mercadolibre:hover {
+            background: linear-gradient(45deg, #d90429, #ef233c);
+            box-shadow: 0 6px 20px rgba(217, 4, 41, 0.5);
+        }
+
+        .btn-detalles { 
+            display: inline-block; 
+            margin-top: 15px; 
+            color: #7f8c8d; 
+            text-decoration: none; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            border-bottom: 1px dashed transparent;
+            transition: 0.3s;
+        }
+        .btn-detalles:hover { color: var(--secondary-color); border-bottom-color: var(--secondary-color); }
+
+        /* --- Sección de Contacto --- */
+        .contact-section { 
+            background: white; 
+            padding: 50px 30px; 
+            border-radius: 20px; 
+            margin-top: 40px; 
+            box-shadow: var(--shadow-md);
+            border-top: 5px solid var(--secondary-color);
+        }
+        
+        .contact-form { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+        
+        .contact-form input, .contact-form textarea { 
+            padding: 15px; 
+            border: 2px solid #eee; 
+            border-radius: 10px; 
+            font-family: inherit;
+            transition: 0.3s;
+            background: #f9f9f9;
+        }
+        
+        .contact-form input:focus, .contact-form textarea:focus { 
+            border-color: var(--primary-color); 
+            background: white;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.1);
+        }
+
+        .contact-form button { 
+            background: var(--dark-bg); 
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            cursor: pointer; 
+            border-radius: 10px; 
+            font-size: 1.1rem; 
+            font-weight: 600;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .contact-form button:hover { 
+            background: var(--primary-color); 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
+        }
+
+        /* --- Footer --- */
+        footer { 
+            background: linear-gradient(to right, #1a1a1a, #2c3e50); 
+            color: #bdc3c7; 
+            text-align: center; 
+            padding: 40px 20px; 
+            margin-top: 60px; 
+            border-top: 1px solid #333;
+        }
+        footer p { margin: 5px 0; font-weight: 500; color: white; }
+    </style>
+</head>
+<body id="inicio">
+
+<header>
+    <h1>⚙️ AutoParts TDT</h1>
+    <nav>
+        <a href="TDT.html">Inicio</a>
+        <a href="catalogo 2.html">Catálogo</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h2>Todo para tu vehículo</h2>
+    <p>¡Calidad garantizada con productos originales!</p>
+</section>
+
+<div class="container" id="catalogo">
+    <h2 style="text-align: center; color: #1d3557; margin-bottom: 40px; font-weight: 800; font-size: 2rem;">Nuestro Catálogo Destacado</h2>
+    <div class="grid">
+        <div class="card">
+            <a href="catalogo.html">
+            <img src="https://http2.mlstatic.com/D_NQ_NP_2X_841348-MLV106501008541_022026-F.webp" alt="Kit de tiempo GMB"></a>
+            <div class="card-info">
+                <h3>Kit correa de Tiempo GMB</h3>
+                <p>Kit Tiempo Honda Odyssey 3.5 05-17 (197dts) Gmb Original</p>
+                <p class="price">$200.00</p>
+                <a href="https://articulo.mercadolibre.com.ve/MLV-957684792-kit-tiempo-honda-odyssey-35-05-17-197dts-gmb-original-_JM" class="btn-mercadolibre">Consultar Disponibilidad</a>
+                <a href="producto-gmb.html" class="btn-detalles">Ver más detalles &rarr;</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <a href="catalogo cadenas.html">
+            <img src="https://http2.mlstatic.com/D_NQ_NP_2X_819954-MLV106660361075_022026-F.webp" alt="Kit de tiempo OSK"></a>
+            <div class="card-info">
+                <h3>Kit Cadena OSK Toyota</h3>
+                <p>KIT CADENA TIEMPO TOYOTA YARIS 1.3 00-10 2NZ-FE (6 PIEZAS) (120E)</p>
+                <p class="price">$165.00</p>
+                <a href="https://articulo.mercadolibre.com.ve/MLV-774475377-kit-cadena-tiempo-yaris-13-00-10-2nz-fe-6-pzs-120e-_JM" class="btn-mercadolibre">Consultar Disponibilidad</a>
+                <a href="T028K.html" class="btn-detalles">Ver más detalles &rarr;</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <a href="Catalogo Bombas-de-agua.html">
+            <img src="https://http2.mlstatic.com/D_NQ_NP_2X_980625-MLV105745785838_022026-F.webp" alt="Bomba de agua NPW">
+            </a>
+            <div class="card-info">
+                <h3>Bomba de agua NPW</h3>
+                <p>Honda Civic R18A 06-11</p>
+                <p class="price">$60.00</p>
+                <a href="https://articulo.mercadolibre.com.ve/MLV-957618992-bomba-agua-honda-civic-emotion-r18-18-06-11-_JM" class="btn-mercadolibre">Consultar Disponibilidad</a>
+                <a href="producto-bomba.html" class="btn-detalles">Ver más detalles &rarr;</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <a href="catalogo correas.html">
+            <img src="https://http2.mlstatic.com/D_NQ_NP_2X_783614-MLV105814680758_022026-F.webp" alt="correa de tiempo sun"></a>
+            <div class="card-info">
+                <h3>Correa de tiempo Sun</h3>
+                <p>CORREA TIEMPO HONDA ACCORD - ODYSSEY . PILOT 3.0 197 (DIENTES) 26MM</p>
+                <p class="price">$65.00</p>
+                <a href="https://articulo.mercadolibre.com.ve/MLV-957580148-correa-tiempo-honda-accord-odyssey-pilot-30-197dts-26mm-_JM" class="btn-mercadolibre">Consultar Disponibilidad</a>
+                <a href="A620YU26MM 197T.html" class="btn-detalles">Ver más detalles &rarr;</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container" id="contacto">
+    <div class="contact-section">
+        <h2 style="text-align: center; color: #1d3557; font-weight: 800;">Contáctanos</h2>
+        <p style="text-align: center; color: #666;">¿Tienes dudas sobre algún repuesto? Escríbenos.</p>
+        <form class="contact-form">
+            <input type="text" placeholder="Tu Nombre" required>
+            <input type="email" placeholder="Correo Electrónico" required>
+            <textarea rows="5" placeholder="¿Qué repuesto estás buscando?" required></textarea>
+            <button type="submit">Enviar Mensaje</button>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 AutoParts TDT - Repuestos de Calidad</p>
+    <small>Distrito Capital, Venezuela</small>
+</footer>
+
+</body>
+</html>

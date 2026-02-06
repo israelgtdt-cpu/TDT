@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Completo - AutoParts TDT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- Variables y Reset (Mismo estilo que el anterior) --- */
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #333;
+            --dark-bg: #1a1a1a;
+            --light-bg: #f1f5f9;
+            --text-color: #333;
+            --shadow-sm: 0 4px 6px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            background-color: var(--light-bg); 
+            color: var(--text-color);
+        }
+
+        /* --- Header Glassmorphism --- */
+        header { 
+            background-color: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            color: white; 
+            padding: 1rem; 
+            text-align: center; 
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        header h1 {
+            margin: 0 0 10px 0;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav { margin-top: 10px; }
+        nav a { 
+            color: #e0e0e0; 
+            text-decoration: none; 
+            margin: 0 15px; 
+            font-weight: 600; 
+            position: relative;
+            transition: 0.3s;
+        }
+        nav a:hover { color: white; }
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+        nav a:hover::after { width: 100%; }
+
+        /* --- Contenedor de Categorías --- */
+        .categories-container { 
+            background: white; 
+            padding: 20px; 
+            text-align: center; 
+            box-shadow: var(--shadow-sm); 
+            position: sticky; 
+            top: 80px; /* Ajuste para que no se oculte tras el header */
+            z-index: 900;
+        }
+
+        .category-btn { 
+            background: #f1f1f1; 
+            border: none; 
+            padding: 10px 25px; 
+            margin: 5px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease; 
+            color: #555;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .category-btn:hover { 
+            transform: translateY(-2px);
+            background: #e2e2e2;
+        }
+
+        .category-btn.active { 
+            background: var(--primary-color); 
+            color: white; 
+            box-shadow: 0 4px 10px rgba(230, 57, 70, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* --- Barra de Búsqueda --- */
+        .search-container { 
+            background: var(--secondary-color); 
+            padding: 30px; 
+            text-align: center; 
+            margin-bottom: 20px;
+        }
+
+        .search-container input { 
+            padding: 15px 20px; 
+            width: 60%; 
+            max-width: 600px;
+            border-radius: 50px; 
+            border: 2px solid transparent; 
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .search-container input:focus {
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- Grid y Cards --- */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+
+        .card { 
+            background: white; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            box-shadow: var(--shadow-sm); 
+            display: flex; 
+            flex-direction: column; 
+            border: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card:hover { 
+            transform: translateY(-10px); 
+            box-shadow: var(--shadow-md); 
+        }
+
+        /* Animación de zoom en imagen */
+        .card img { 
+            width: 100%; 
+            height: 220px; 
+            object-fit: contain; 
+            padding: 10px;
+            box-sizing: border-box;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover img { transform: scale(1.1); }
+
+        .card-info { 
+            padding: 20px; 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            background: white;
+            z-index: 2;
+        }
+
+        .card-info h3 {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            margin-top: 0;
+        }
+
+        .card-info p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .price { 
+            font-size: 1.6rem; 
+            color: var(--primary-color); 
+            font-weight: 800; 
+            margin: 15px 0; 
+        }
+        
+        /* Botones */
+        .btn-mercadolibre { 
+            background: linear-gradient(45deg, #ff0808, #d90429);
+            color: white; 
+            text-align: center; 
+            padding: 12px; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            margin-bottom: 10px; 
+            box-shadow: 0 4px 15px rgba(217, 4, 41, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-mercadolibre:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(217, 4, 41, 0.5);
+        }
+
+        .btn-detalles { 
+            display: block; 
+            margin-top: 10px; 
+            color: #7f8c8d; 
+            text-decoration: none; 
+            font-weight: 600; 
+            text-align: center;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .btn-detalles:hover { color: var(--secondary-color); text-decoration: underline; }
+        
+        /* Utilidad para JS */
+        .hide { display: none; }
+
+        /* --- Footer --- */
+        footer { 
+            background: linear-gradient(to right, #1a1a1a, #2c3e50); 
+            color: #bdc3c7; 
+            text-align: center; 
+            padding: 40px 20px; 
+            margin-top: 60px; 
+            border-top: 1px solid #333;
+        }
+        footer p { margin: 5px 0; font-weight: 500; color: white; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🛒 Catálogo de Productos</h1>
+    <nav>
+        <a href="TDT.html">Inicio</a>
+        <a href="catalogo 2.html" style="color: white;">Catálogo</a>
+
+</header>
+
+<div class="categories-container">
+    <button class="category-btn active" onclick="filterProduct('todos')">Todos</button>
+    <button class="category-btn" onclick="filterProduct('honda')">Honda</button>
+    <button class="category-btn" onclick="filterProduct('toyota')">Toyota</button>
+</div>
+
+<div class="search-container">
+    <input type="text" id="searchInput" onkeyup="searchByText()" placeholder="Buscar por nombre...">
+</div>
+
+<div class="container">
+    <div class="grid" id="productGrid">
+        
+        <div class="card item-honda item-kits">
+            <a href="producto-gmb.html">
+            <img src="https://http2.mlstatic.com/D_NQ_NP_2X_841348-MLV106501008541_022026-F.webp" alt="Kit de tiempo GMB">
+            </a>
+            <div class="card-info">
+                <h3>Kit correa de Tiempo GMB</h3>
+                <p>Honda Odyssey 3.5 05-17 (197dts)</p>
+                <p class="price">$200.00</p>
+                <a href="https://articulo.mercadolibre.com.ve/MLV-957684792-kit-tiempo-honda-odyssey-35-05-17-197dts-gmb-original-_JM#polycard_client=search-desktop&search_layout=grid&position=6&type=item&tracking_id=224683d7-1894-412f-b4b1-b118bca32446&wid=MLV957684792&sid=search" class="btn-mercadolibre">Ver en Mercado Libre</a>
+                <a href="producto-gmb.html" class="btn-detalles">Ver a detalles</a>
+            </div>
+        </div>
+
+        <div class="card item-toyota item-kits">
+            <img src="https://http2.mlstatic.com/D_NQ_NP_2X_819954-MLV106660361075_022026-F.webp" alt="Kit de tiempo OSK">
+            <div class="card-info">
+                <h3>Kit Cadena OSK Toyota</h3>
+                <p>Toyota Yaris 1.3 00-10 2NZ-FE (6 PIEZAS)</p>
+                <p class="price">$165.00</p>
+                <a href="https://articulo.mercadolibre.com.ve/MLV-774475377-..." class="btn-mercadolibre">Ver en Mercado Libre</a>
+                <a href="producto-toyota.html" class="btn-detalles">Ver a detalles</a>
+            </div>
+        </div>
+
+        <div class="card item-honda item-bombas">
+            <a href="producto-bomba.html">
+            <img src="https://http2.mlstatic.com/D_NQ_NP_2X_980625-MLV105745785838_022026-F.webp" alt="Bomba de agua NPW">
+            </a>
+            <div class="card-info">
+                <h3>Bomba de agua NPW</h3>
+                <p>Civic R18 06-11</p>
+                <p class="price">$60.00</p>
+                <a href="https://articulo.mercadolibre.com.ve/MLV-957618992-..." class="btn-mercadolibre">Ver en Mercado Libre</a>
+                <a href="producto-bomba.html" class="btn-detalles">Ver a detalles</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <a href="A620YU26MM 197T.html">
+            <img src="https://http2.mlstatic.com/D_NQ_NP_2X_783614-MLV105814680758_022026-F.webp" alt="correa de tiempo"></a>
+            <div class="card-info">
+                <h3>Correa de Tiempo|A620YU26MM 197T</h3>
+                <p>Correa Tiempo Honda Accord Odyssey Pilot 3.0 (197dts) 26mm</p>
+                <p class="price">$65.00</p>
+                <a href="https://articulo.mercadolibre.com.ve/MLV-957580148-correa-tiempo-honda-accord-odyssey-pilot-30-197dts-26mm-_JM" class="btn-mercadolibre">Ver en Mercado Libre</a>
+                <a href="A620YU26MM 197T.html"class="btn-detalles">Ver a detalles</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <a href="A472RU24MM 126T.html">
+            <img src="https://http2.mlstatic.com/D_NQ_NP_2X_621746-MLV105814537000_022026-F.webp" alt="correa de tiempo"></a>
+            <div class="card-info">
+                <h3>Correa de Tiempo|A472RU24MM 126T</h3>
+                <p>Correa Tiempo Honda Accord - Prelude 2.0 2.2 (126dts) 24mm</p>
+                <p class="price">$55.00</p>
+                <a href="https://articulo.mercadolibre.com.ve/MLV-957684118-correa-tiempo-honda-accord-prelude-20-22-126dts-24mm-_JM" class="btn-mercadolibre">Ver en Mercado Libre</a>
+                <a href="A472RU24MM 126T 1.html"class="btn-detalles">Ver mas detalles</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+     <p>&copy; 2026 AutoParts TDT - Repuestos de Calidad</p>
+    <small>Distrito capital, Venezuela</small>
+</footer>
+
+<script>
+    // Función para filtrar por categorías
+    function filterProduct(value) {
+        let buttons = document.querySelectorAll(".category-btn");
+        buttons.forEach((button) => {
+            if (value.toUpperCase() == button.innerText.toUpperCase()) {
+                button.classList.add("active");
+            } else {
+                button.classList.remove("active");
+            }
+        });
+
+        let elements = document.querySelectorAll(".card");
+        elements.forEach((element) => {
+            if (value == "todos") {
+                element.classList.remove("hide");
+            } else {
+                if (element.classList.contains("item-" + value)) {
+                    element.classList.remove("hide");
+                } else {
+                    element.classList.add("hide");
+                }
+            }
+        });
+    }
+
+    // Función para la barra de búsqueda
+    function searchByText() {
+        let input = document.getElementById("searchInput").value.toUpperCase();
+        let cards = document.querySelectorAll(".card");
+        
+        cards.forEach((card) => {
+            let text = card.querySelector("h3").innerText.toUpperCase();
+            if (text.includes(input)) {
+                card.classList.remove("hide");
+            } else {
+                card.classList.add("hide");
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
